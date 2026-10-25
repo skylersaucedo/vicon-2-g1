@@ -13,7 +13,12 @@ Human-motion-to-humanoid skill transfer: capture household tasks (sweeping with 
 | [manuscripts/2603.14327v1.pdf](manuscripts/2603.14327v1.pdf) | [OmniClone: Engineering a Robust, All-Rounder Whole-Body Humanoid Teleoperation System](https://arxiv.org/abs/2603.14327) (BIGAI and partners). G1 pick-and-place via teleoperation and a GR00T VLA; stratified evaluation. |
 | [manuscripts/2610.07891v1.pdf](manuscripts/2610.07891v1.pdf) | [Beyond Retargeting: Low-Latency and Robust Humanoid Whole-Body Teleoperation with Learned Atomic Motion Primitives](https://arxiv.org/abs/2610.07891) (HKUST, Zhejiang University, Tencent Robotics X). Robustness to noisy mocap input; success-rate definition. |
 | [manuscripts/notes.txt](manuscripts/notes.txt) | Link to the [HOLD dataset](https://github.com/rai-opensource/hold): Vicon BVH locomotion and box-interaction clips released with HuMBLE, including G1 retargets. |
-| `images/` | Figures cropped from the PDFs. |
+| [reports/g1_policy_data_scaling.md](reports/g1_policy_data_scaling.md) | Literature review of every learned policy embodied on a physical G1 (40 manuscripts, 22 with numeric hardware metrics): training data quantity versus hardware success, how many Vicon minutes a household task needs, and a protocol for measuring mocap minutes against normalized task completion. |
+| [potential-manuscript-ideas.md](potential-manuscript-ideas.md) | Seven proposed experiments that the G1 literature has not run and that this lab can: a hardware mocap-minutes curve, a clips-versus-variants factorial, performer count, reference quality versus quantity, a Vicon-predicate benchmark with dataset release, first sweeping and dish-rack policies, and optical capture as a VLA demonstration source. Each with hypothesis, procedure, design diagram, budget, synthetic results showing what the data would look like under H1 and H0, and target manuscript. |
+| [scripts/synthetic_results.py](scripts/synthetic_results.py) | Generates the seven `images/synthetic_e*.png` figures and `research_notes/synthetic_tables.md` from stated assumptions (seed 0). Not measured data. |
+| [research_notes/g1_policy_data_scaling/](research_notes/g1_policy_data_scaling/) | Source notes behind the report: G1 tracking catalog, data-scaling evidence, G1 manipulation from demonstrations, learning-curve methodology. |
+| [scripts/plot_data_vs_success.py](scripts/plot_data_vs_success.py) | Generates `images/g1_data_vs_success.png` from the hardware results tabulated in the report. |
+| `images/` | Figures cropped from the PDFs and generated plots. |
 
 ## Pipeline
 
@@ -31,8 +36,15 @@ flowchart LR
 
 1. [literature_summary.md](literature_summary.md): Summary and side-by-side table.
 2. [fbx_to_g1_policy_pipeline.md](fbx_to_g1_policy_pipeline.md): Sections 0, 5, and 8.
-3. [ZEST](https://arxiv.org/pdf/2602.00401): Results; Materials and Methods.
-4. [HuMBLE](https://arxiv.org/pdf/2610.10489): Supplementary Tables S3 to S9 for G1 parameters.
+3. [reports/g1_policy_data_scaling.md](reports/g1_policy_data_scaling.md): Tables 1 and 2, Figure 1, and the experiment section.
+4. [ZEST](https://arxiv.org/pdf/2602.00401): Results; Materials and Methods.
+5. [HuMBLE](https://arxiv.org/pdf/2610.10489): Supplementary Tables S3 to S9 for G1 parameters.
+
+## Data quantity versus hardware success
+
+Every published G1 hardware result with a trial count, plotted against the data unit each paper used. No G1 study uses minutes of motion capture as its axis; the only minutes-axis humanoid result is on an H1. Details, sources, and the proposed lab protocol are in [reports/g1_policy_data_scaling.md](reports/g1_policy_data_scaling.md).
+
+![Hardware success versus training data on the Unitree G1](images/g1_data_vs_success.png)
 
 ## Figures from the papers
 
@@ -75,6 +87,7 @@ flowchart LR
 - Compute: one 24 GB or larger NVIDIA GPU. An AWS g6e.8xlarge (one L40S, 48 GB) is sufficient; see pipeline Section 5.
 - GR00T: not in phase one; see pipeline Section 0.
 - Success metric: tracking success, tracking fidelity, and task outcome reported separately. The 0.8 task-completion target is scored on object outcome over at least 30 pre-registered hardware trials.
+- Data budget: a specialist box policy needs one to sixteen retargeted clips (under five minutes of post-retargeting motion); a generalist prior needs about three hours of curated capture. A mocap-minutes versus completion curve must be measured in the lab; the protocol is in the report (five nested data levels, seven policies, 315 scored rollouts, 105 to 175 GPU-hours).
 
 ## Open items
 
